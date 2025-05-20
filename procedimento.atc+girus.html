@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo de Instrução - Planilha ATC+GIRUS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+        .status-tag {
+            padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block;
+        }
+        .status-pending {
+            background-color: #FEF3C7; /* amber-100 */
+            color: #92400E; /* amber-800 */
+            border: 1px solid #FCD34D; /* amber-300 */
+        }
+        .status-paid {
+            background-color: #D1FAE5; /* emerald-100 */
+            color: #065F46; /* emerald-800 */
+            border: 1px solid #6EE7B7; /* emerald-300 */
+        }
+        .column-tag {
+            background-color: #D1FAE5; /* emerald-100 */
+            color: #065F46; /* emerald-800 */
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .accordion-content {
+            transition: max-height 0.5s ease-in-out;
+        }
+        #introducao, #organizacao, #passos {
+            scroll-margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-700 leading-relaxed">
+
+    <div id="loader" class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-emerald-700 text-white transition-opacity duration-500 ease-in-out">
+        <div class="w-16 h-16 border-4 border-white border-t-transparent border-solid rounded-full animate-spin"></div>
+        <p class="mt-4 text-xl font-semibold">Protocolo ATC+GIRUS</p>
+    </div>
+
+    <button id="sidebar-toggle" class="md:hidden fixed top-4 left-4 z-50 p-2 bg-emerald-600 text-white rounded-md shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+    </button>
+
+    <aside id="sidebar" class="w-64 bg-emerald-800 text-emerald-100 p-4 space-y-2 fixed h-screen top-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-lg">
+        <div class="text-2xl font-semibold text-white text-center py-5 border-b border-emerald-700">
+            ATC+GIRUS
+        </div>
+        <nav class="mt-6">
+            <a href="#introducao" class="flex items-center space-x-3 py-2.5 px-4 rounded-md hover:bg-emerald-700 hover:text-white transition-colors duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                <span>Introdução</span>
+            </a>
+            <a href="#organizacao" class="flex items-center space-x-3 py-2.5 px-4 rounded-md hover:bg-emerald-700 hover:text-white transition-colors duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                </svg>
+                <span>Organização</span>
+            </a>
+            <a href="#passos" class="flex items-center space-x-3 py-2.5 px-4 rounded-md hover:bg-emerald-700 hover:text-white transition-colors duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h7.5M8.25 12h7.5m-7.5 5.25h7.5M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+                <span>Passo a Passo</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main id="main-content" class="md:ml-64 transition-all duration-300 ease-in-out">
+        <div class="container mx-auto max-w-5xl p-6 md:pt-12 lg:pt-16 pt-20">
+
+            <header class="mb-12 md:mb-16 text-center">
+                <p class="text-sm text-emerald-600 font-semibold uppercase tracking-wider mb-1">Planilha ATC+GIRUS</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-emerald-800 mb-3">Protocolo de Instrução de Uso</h1>
+                <p class="text-lg md:text-xl text-gray-600">Seu Guia para Gerenciamento Eficiente de Pagamentos</p>
+            </header>
+
+            <section id="introducao" class="mb-10 bg-white p-6 md:p-8 shadow-xl rounded-xl">
+                <h2 class="text-2xl md:text-3xl font-bold text-emerald-700 mb-5 border-b-2 border-emerald-200 pb-3">Introdução</h2>
+                <p class="text-gray-600 mb-3 text-base md:text-lg">
+                    Este protocolo descreve o passo a passo para você, usuário, gerenciar contas a pagar (ou receber) utilizando a planilha <strong class="font-semibold text-emerald-700">ATC+GIRUS</strong> de forma eficiente. O objetivo é garantir que todos os registros sejam feitos corretamente, desde a inclusão de uma nova conta até sua quitação e posterior conciliação.
+                </p>
+            </section>
+
+            <section id="organizacao" class="mb-10 bg-white p-6 md:p-8 shadow-xl rounded-xl">
+                <h2 class="text-2xl md:text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-200 pb-3">Organização da Planilha ATC+GIRUS</h2>
+                <p class="text-gray-600 mb-5 text-base md:text-lg">
+                    Sua planilha está organizada com as seguintes colunas para registrar e acompanhar os pagamentos:
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-5">
+                    <span class="column-tag">id</span>
+                    <span class="column-tag">data_inclusao</span>
+                    <span class="column-tag">data_vencimento</span>
+                    <span class="column-tag">data_pagamento</span>
+                    <span class="column-tag">descricao</span>
+                    <span class="column-tag">nf</span>
+                    <span class="column-tag">categoria</span>
+                    <span class="column-tag">classificacao</span>
+                    <span class="column-tag">valor</span>
+                    <span class="column-tag">tipo_pagamento</span>
+                    <span class="column-tag">status</span>
+                    <span class="column-tag">responsavel</span>
+                    <span class="column-tag">banco</span>
+                    <span class="column-tag">observacao</span>
+                </div>
+                <p class="text-gray-600 text-base md:text-lg">Você pode usar recursos da sua planilha como filtros, classificação e formatação condicional para destacar informações importantes (ex: status <span class="status-tag status-pending">Pendente</span>, <span class="status-tag status-paid">Pago</span>, ou datas de vencimento próximas).</p>
+            </section>
+
+            <section id="passos" class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-emerald-700 mb-8 text-center">Passo a Passo para Utilização</h2>
+
+                <div class="accordion-item mb-4 bg-white shadow-lg rounded-xl overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-6 md:p-8 text-left text-xl md:text-2xl font-semibold text-emerald-600 hover:bg-emerald-50 focus:outline-none transition-colors duration-150">
+                        <span class="flex items-center">
+                            <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm font-bold ring-2 ring-emerald-200 shrink-0">1</span>
+                            Registrando uma Nova Conta ou Despesa
+                        </span>
+                        <svg class="accordion-icon w-6 h-6 text-emerald-500 transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content max-h-0 overflow-hidden">
+                        <div class="p-6 md:p-8 pt-0 text-gray-600">
+                            <p class="mb-4">Assim que uma nova conta, fatura ou compromisso financeiro precisar ser registrado:</p>
+                            <ol class="list-decimal list-inside space-y-4">
+                                <li><strong class="font-semibold text-gray-800">Criar Nova Linha para Registro:</strong><p class="ml-5 mt-1 text-sm md:text-base">Na sua planilha de controle de pagamentos <strong class="font-medium text-emerald-600">ATC+GIRUS</strong>, adicione uma nova linha para a conta (geralmente, na próxima linha vazia disponível).</p></li>
+                                <li><strong class="font-semibold text-gray-800">Preencher as Células da Nova Linha:</strong><p class="ml-5 mt-1 mb-2 text-sm md:text-base">Nesta nova linha, preencha as células correspondentes às seguintes colunas:</p><ul class="list-disc list-inside ml-10 space-y-1 text-sm md:text-base"><li>Coluna <strong class="font-medium text-gray-700">id:</strong> Um identificador único (ex: número sequencial).</li><li>Coluna <strong class="font-medium text-gray-700">data_inclusao:</strong> A data em que você está registrando (normalmente, a data de hoje).</li><li>Coluna <strong class="font-medium text-gray-700">data_vencimento:</strong> A data limite para o pagamento. <span class="text-red-600 font-bold">Coluna crucial!</span></li><li>Coluna <strong class="font-medium text-gray-700">descricao:</strong> Um resumo claro do que se trata a conta.</li><li>Coluna <strong class="font-medium text-gray-700">nf:</strong> O número da Nota Fiscal, se houver.</li><li>Coluna <strong class="font-medium text-gray-700">categoria:</strong> A categoria da despesa/receita.</li><li>Coluna <strong class="font-medium text-gray-700">classificacao:</strong> Uma subcategoria para maior detalhamento.</li><li>Coluna <strong class="font-medium text-gray-700">valor:</strong> O montante exato a ser pago ou recebido.</li><li>Coluna <strong class="font-medium text-gray-700">responsavel:</strong> A pessoa ou departamento encarregado.</li><li>Coluna <strong class="font-medium text-gray-700">banco:</strong> Informações bancárias relevantes.</li><li>Coluna <strong class="font-medium text-gray-700">observacao:</strong> Qualquer nota adicional importante.</li></ul></li>
+                                <li><strong class="font-semibold text-gray-800">Definir Status Inicial nas Células Correspondentes:</strong><p class="ml-5 mt-1 text-sm md:text-base">Na coluna <strong class="font-medium text-gray-700">status</strong>, preencha com "<span class="status-tag status-pending">Pendente</span>" ou "<span class="status-tag status-pending">A Pagar</span>". As colunas <strong class="font-medium text-gray-700">data_pagamento</strong> e <strong class="font-medium text-gray-700">tipo_pagamento</strong> devem permanecer em branco neste momento.</p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item mb-4 bg-white shadow-lg rounded-xl overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-6 md:p-8 text-left text-xl md:text-2xl font-semibold text-emerald-600 hover:bg-emerald-50 focus:outline-none transition-colors duration-150">
+                        <span class="flex items-center">
+                            <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm font-bold ring-2 ring-emerald-200 shrink-0">2</span>
+                            Acompanhando e Preparando para o Pagamento
+                        </span>
+                        <svg class="accordion-icon w-6 h-6 text-emerald-500 transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content max-h-0 overflow-hidden">
+                        <div class="p-6 md:p-8 pt-0 text-gray-600">
+                            <p class="mb-4">É vital monitorar as contas para evitar atrasos.</p>
+                            <ol class="list-decimal list-inside space-y-4">
+                                <li><strong class="font-semibold text-gray-800">Utilizar Recursos de Filtragem e Classificação:</strong><p class="ml-5 mt-1 text-sm md:text-base">Regularmente (diariamente ou semanalmente), use os recursos de filtro ou classificação da sua planilha. Ordene pela coluna <strong class="font-medium text-gray-700">data_vencimento</strong> para identificar as contas mais próximas do vencimento. Filtre pela coluna <strong class="font-medium text-gray-700">status</strong> para ver apenas as "<span class="status-tag status-pending">Pendentes</span>".</p><p class="ml-5 mt-1 text-sm md:text-base">Você pode usar formatação condicional para destacar visualmente as linhas com datas de vencimento próximas.</p></li>
+                                <li><strong class="font-semibold text-gray-800">Verificar Detalhes e Preparar:</strong><p class="ml-5 mt-1 text-sm md:text-base">Revise as informações da linha da conta na planilha. O <strong class="font-medium text-gray-700">responsavel</strong> (indicado na coluna correspondente) deve ser alertado. Confirme se todos os dados para o pagamento estão corretos e se há fundos/crédito disponível.</p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item mb-4 bg-white shadow-lg rounded-xl overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-6 md:p-8 text-left text-xl md:text-2xl font-semibold text-emerald-600 hover:bg-emerald-50 focus:outline-none transition-colors duration-150">
+                        <span class="flex items-center">
+                            <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm font-bold ring-2 ring-emerald-200 shrink-0">3</span>
+                            Executando o Pagamento (Ação Externa)
+                        </span>
+                        <svg class="accordion-icon w-6 h-6 text-emerald-500 transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content max-h-0 overflow-hidden">
+                        <div class="p-6 md:p-8 pt-0 text-gray-600">
+                           <p class="mb-4">Este ato ocorre fora da planilha, mas é crucial para a próxima etapa de atualização.</p>
+                            <ol class="list-decimal list-inside space-y-4">
+                                <li><strong class="font-semibold text-gray-800">Realizar o Pagamento:</strong><p class="ml-5 mt-1 text-sm md:text-base">O <strong class="font-medium text-gray-700">responsavel</strong> realiza o pagamento através do método escolhido.</p></li>
+                                <li><strong class="font-semibold text-gray-800">Guardar Comprovante:</strong><p class="ml-5 mt-1 text-sm md:text-base">Sempre salve o comprovante de pagamento. Você pode anotar o caminho ou identificador do comprovante na coluna <strong class="font-medium text-gray-700">observacao</strong> da planilha.</p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item mb-4 bg-white shadow-lg rounded-xl overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-6 md:p-8 text-left text-xl md:text-2xl font-semibold text-emerald-600 hover:bg-emerald-50 focus:outline-none transition-colors duration-150">
+                        <span class="flex items-center">
+                            <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm font-bold ring-2 ring-emerald-200 shrink-0">4</span>
+                            Atualizando a Planilha Após o Pagamento
+                        </span>
+                        <svg class="accordion-icon w-6 h-6 text-emerald-500 transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content max-h-0 overflow-hidden">
+                        <div class="p-6 md:p-8 pt-0 text-gray-600">
+                            <p class="mb-4">Imediatamente após a confirmação do pagamento, a planilha <strong class="font-medium text-emerald-600">ATC+GIRUS</strong> deve ser atualizada.</p>
+                            <ol class="list-decimal list-inside space-y-4">
+                                <li><strong class="font-semibold text-gray-800">Localizar a Linha da Conta Paga:</strong><p class="ml-5 mt-1 text-sm md:text-base">Na planilha, encontre a linha correspondente à conta que foi paga. Você pode usar a função de busca (Ctrl+F ou Cmd+F) ou filtros.</p></li>
+                                <li><strong class="font-semibold text-gray-800">Preencher as Células de Informações de Pagamento:</strong><p class="ml-5 mt-1 mb-2 text-sm md:text-base">Atualize as seguintes colunas na linha da conta paga:</p><ul class="list-disc list-inside ml-10 space-y-1 text-sm md:text-base"><li>Coluna <strong class="font-medium text-gray-700">data_pagamento:</strong> Insira a data em que o pagamento foi efetivamente realizado.</li><li>Coluna <strong class="font-medium text-gray-700">tipo_pagamento:</strong> Indique o método utilizado (PIX, Boleto, etc.).</li><li>Coluna <strong class="font-medium text-gray-700">status:</strong> <span class="text-red-600 font-bold">Importante!</span> Altere para "<span class="status-tag status-paid">Pago</span>" ou "<span class="status-tag status-paid">Realizado</span>".</li><li>Coluna <strong class="font-medium text-gray-700">observacao:</strong> Adicione informações relevantes como o número da transação, código de autorização, ou referência ao comprovante.</li></ul></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item mb-4 bg-white shadow-lg rounded-xl overflow-hidden">
+                    <button class="accordion-header w-full flex items-center justify-between p-6 md:p-8 text-left text-xl md:text-2xl font-semibold text-emerald-600 hover:bg-emerald-50 focus:outline-none transition-colors duration-150">
+                        <span class="flex items-center">
+                            <span class="bg-emerald-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm font-bold ring-2 ring-emerald-200 shrink-0">5</span>
+                            Conciliando e Verificando (Opcional)
+                        </span>
+                        <svg class="accordion-icon w-6 h-6 text-emerald-500 transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content max-h-0 overflow-hidden">
+                        <div class="p-6 md:p-8 pt-0 text-gray-600">
+                            <p class="mb-4">Periodicamente, concilie os registros da sua planilha com seus extratos bancários.</p>
+                            <ol class="list-decimal list-inside space-y-4">
+                                <li><strong class="font-semibold text-gray-800">Comparar Registros da Planilha com Extratos:</strong><p class="ml-5 mt-1 text-sm md:text-base">Filtre sua planilha pela coluna <strong class="font-medium text-gray-700">status</strong> para mostrar apenas os "<span class="status-tag status-paid">Pago</span>" dentro de um período específico. Compare esta lista com as transações dos seus extratos bancários.</p></li>
+                                <li><strong class="font-semibold text-gray-800">Verificar Valores e Datas:</strong><p class="ml-5 mt-1 text-sm md:text-base">Confirme se os valores na coluna <strong class="font-medium text-gray-700">valor</strong> e as datas na coluna <strong class="font-medium text-gray-700">data_pagamento</strong> da planilha coincidem com os extratos.</p></li>
+                                <li><strong class="font-semibold text-gray-800">Corrigir Discrepâncias na Planilha:</strong><p class="ml-5 mt-1 text-sm md:text-base">Se encontrar qualquer diferença, investigue e corrija os registros diretamente na linha e célula apropriada da planilha.</p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="mt-12 md:mt-16 pt-8 border-t border-gray-300 text-center">
+                <p class="text-gray-600">
+                    Seguindo este protocolo ao usar sua planilha <strong class="font-semibold text-emerald-700">ATC+GIRUS</strong>, você manterá um controle financeiro organizado e preciso.
+                </p>
+                <p class="mt-4 text-sm text-gray-500">
+                    Esta documentação é o seu guia oficial para a Planilha ATC+GIRUS.
+                </p>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        // Script para o Spinner de Carregamento
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('opacity-0');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Script para o Accordion (permite múltiplas secções abertas)
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                const content = item.querySelector('.accordion-content');
+                const icon = item.querySelector('.accordion-icon');
+
+                header.addEventListener('click', () => {
+                    const isOpen = item.classList.contains('is-open');
+                    if (isOpen) {
+                        item.classList.remove('is-open');
+                        content.style.maxHeight = '0px';
+                        icon.classList.remove('rotate-180');
+                    } else {
+                        item.classList.add('is-open');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.classList.add('rotate-180');
+                    }
+                });
+            });
+
+            // Script para Toggle da Sidebar e Navegação Suave
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('-translate-x-full');
+                    sidebar.classList.toggle('translate-x-0');
+                });
+            }
+
+            document.querySelectorAll('#sidebar nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        if (window.innerWidth < 768 && sidebar && sidebar.classList.contains('translate-x-0')) {
+                            sidebar.classList.add('-translate-x-full');
+                            sidebar.classList.remove('translate-x-0');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
